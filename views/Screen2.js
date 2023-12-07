@@ -46,30 +46,25 @@ export default function Screen2({ navigation, route }) {
   };
 
   const handleDeleteVocabulary = (id) => {
+    const deleteData = data.filter(item => item.id === id);
     const updatedData = data.filter(item => item.id !== id);
     setData(updatedData);
-    store.dispatch(deleteVocabulary(id));
+    store.dispatch(deleteVocabulary(deleteData[0].content.id));
   };
+
 
   const handleUpdateVocabulary = () => {
     if (selectedVocabulary) {
-      console.log('Current Redux State before update:', store.getState());
-      // Update Redux state
       store.dispatch(
-        updateVocabulary(selectedVocabulary.id, english, vietnamese)
-      );
-      console.log('Current Redux State after update:', store.getState());
-      // Update local state
+        updateVocabulary(selectedVocabulary.content.id, english, vietnamese)  );
       const updatedData = data.map((item) =>
         item.id === selectedVocabulary.id
           ? { ...item, content: { content: english }, translation: { content: vietnamese } }
-          : item
-      );
-      setData(updatedData);
-      // Clear selected vocabulary after update
-      setSelectedVocabulary(null);
-    }
-  };
+          : item );
+      setData(updatedData);  setSelectedVocabulary(null); setEnglish('');
+      setVietnamese('');   setSelectedVocabulary(null);  } };
+
+
 
   const handleUpdateUserAPI = async () => {
     try {
@@ -128,7 +123,7 @@ export default function Screen2({ navigation, route }) {
               <TouchableOpacity onPress={() => handleDeleteVocabulary(item.id)}>
                 <AntDesign name="delete" size={15} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleUpdateVocabulary(item.id)}>
+              <TouchableOpacity onPress={() => handleUpdateVocabulary()}>  
                 <Entypo name="pencil" size={15} color="black" />
               </TouchableOpacity>
             </View>

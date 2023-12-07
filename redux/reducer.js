@@ -23,30 +23,29 @@ const reducer = (state = initialState, action) => {
                 english: [...state.english, { id: state.english.length + 1, content: action.english }],
                 vietnamese: [...state.vietnamese, {id: state.vietnamese.length + 1, content: action.vietnamese}]
             };
-        case "DELETE_VOCABULARY":
-                const updatedEnglish = state.english.slice(0, action.id).concat(state.english.slice(action.id + 1));
-                const updatedVietnamese = state.vietnamese.slice(0, action.id).concat(state.vietnamese.slice(action.id + 1));
+            case "DELETE_VOCABULARY":
+              let index = action.id;
+              const updatedEnglish = state.english.filter(item => item.id !== action.id);
+              const updatedVietnamese = state.vietnamese.filter(item => item.id !== action.id);
+              return {
+                ...state,
+                english: updatedEnglish,
+                vietnamese: updatedVietnamese,
+              };
+              case "UPDATE_VOCABULARY":
                 return {
                   ...state,
-                  english: updatedEnglish,
-                  vietnamese: updatedVietnamese,
-                };
-                case "UPDATE_VOCABULARY":
-                    return {
-                      ...state,
-                      english: state.english.map(item => {
-                        if (item.id === action.id) {
-                          return { ...item, content: action.updatedContent };
-                        }
-                        return item;
-                      }),
-                      vietnamese: state.vietnamese.map(item => {
-                        if (item.id === action.id) {
-                          return { ...item, content: action.updatedTranslation };
-                        }
-                        return item;
-                      }),
-                    };
+                  english: state.english.map(item => {
+                    if (item.id === action.id) {
+                      return { ...item, content: action.updatedContent };
+                    }return item;
+                  } ),
+                  vietnamese: state.vietnamese.map(item => {
+                    if (item.id === action.id) {
+                      return { ...item, content: action.updatedTranslation };
+                    } return item;
+                  } ) ,
+                };                
         default:
             return state;
     }
